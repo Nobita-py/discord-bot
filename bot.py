@@ -1,11 +1,10 @@
 import discord
 from discord.ext import commands
 import os
-import asyncio
 
+# Proper intents setup
 intents = discord.Intents.default()
 intents.message_content = True
-intents.guilds = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
@@ -51,12 +50,11 @@ TRIALS = {
 @bot.event
 async def on_ready():
     print(f'✅ {bot.user} is online!')
-    await asyncio.sleep(1)
     try:
         synced = await bot.tree.sync()
         print(f'✅ Synced {len(synced)} command(s)')
     except Exception as e:
-        print(f'❌ Failed to sync commands: {e}')
+        print(f'❌ Failed to sync: {e}')
 
 @bot.event
 async def on_guild_channel_create(channel):
@@ -70,13 +68,12 @@ async def on_guild_channel_create(channel):
         embed.add_field(name="/trials", value="View Trial Packages pricing", inline=False)
         embed.add_field(name="/raging-demon", value="View Raging Demon pricing", inline=False)
         embed.set_footer(text="Choose a command above to see pricing details!")
-        
         try:
             await channel.send(embed=embed)
-        except Exception as e:
-            print(f"Error sending message: {e}")
+        except:
+            pass
 
-@bot.tree.command(name="raids", description="View Raid Services pricing")
+@bot.tree.command(name="raids")
 async def raids(interaction: discord.Interaction):
     embed = discord.Embed(
         title="🔥 Raid Services Available 🔥",
@@ -89,10 +86,10 @@ async def raids(interaction: discord.Interaction):
         for raid_tier, reward in pricing.items():
             embed.add_field(name=f"⚔️ {raid_tier}", value=reward, inline=False)
     
-    embed.set_footer(text="🎟️ Open a ticket to order | Values from FantasyBlox")
+    embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)
 
-@bot.tree.command(name="trials", description="View Trial Packages pricing")
+@bot.tree.command(name="trials")
 async def trials(interaction: discord.Interaction):
     embed = discord.Embed(
         title="📦 Trial Packages",
@@ -105,10 +102,10 @@ async def trials(interaction: discord.Interaction):
         for trial_name, reward in trials_list.items():
             embed.add_field(name=f"  • {trial_name}", value=f"  {reward}", inline=False)
     
-    embed.set_footer(text="🎟️ Open a ticket to order | Values from FantasyBlox")
+    embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)
 
-@bot.tree.command(name="raging-demon", description="View Raging Demon pricing")
+@bot.tree.command(name="raging-demon")
 async def raging_demon(interaction: discord.Interaction):
     embed = discord.Embed(
         title="⚡ Raging Demon",
@@ -118,14 +115,14 @@ async def raging_demon(interaction: discord.Interaction):
     
     embed.add_field(name="💰 Pricing", value="x2 Portal (24M) or equivalent fruits", inline=False)
     embed.add_field(name="📍 Examples", value="Dough (30M) / Buddha (12M) + Portal (12M) / T-Rex (20M) + Love (1.2M) + Quake (1M)", inline=False)
-    embed.add_field(name="📍 Fruit Values", value="Check values at: https://fantasyblox.com/games/blox-fruits/values", inline=False)
+    embed.add_field(name="📍 Fruit Values", value="Check: https://fantasyblox.com/games/blox-fruits/values", inline=False)
     
     embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)
 
 token = os.getenv('DISCORD_TOKEN')
 if not token:
-    print("ERROR: DISCORD_TOKEN environment variable not set!")
+    print("ERROR: DISCORD_TOKEN not set!")
     exit(1)
 
 bot.run(token)

@@ -137,5 +137,5 @@ async def raging_demon(interaction: discord.Interaction):
 import os
 token = os.getenv('TOKEN')
 if not token:
-    token = 'MTQ5ODk3MjI4NTAxMTQ5MjkyNA.GdYre4.LAwAK2Z388BYeFUVKG701Hdr-H__pCO1XK53Zc'
+   token = 'YOUR_TOKEN_HERE'
 bot.run(token)

@@ -67,6 +67,7 @@ async def on_guild_channel_create(channel):
         embed.add_field(name="/raids", value="View Raid Services pricing", inline=False)
         embed.add_field(name="/trials", value="View Trial Packages pricing", inline=False)
         embed.add_field(name="/raging-demon", value="View Raging Demon pricing", inline=False)
+        embed.add_field(name="/first-of-darkness", value="View First of Darkness pricing", inline=False)
         embed.set_footer(text="Choose a command above to see pricing details!")
         try:
             await channel.send(embed=embed)
@@ -116,6 +117,22 @@ async def raging_demon(interaction: discord.Interaction):
     embed.add_field(name="💰 Pricing", value="x2 Portal (24M) or equivalent fruits", inline=False)
     embed.add_field(name="📍 Examples", value="Dough (30M) / Buddha (12M) + Portal (12M) / T-Rex (20M) + Love (1.2M) + Quake (1M)", inline=False)
     embed.add_field(name="📍 Fruit Values", value="Check: https://fantasyblox.com/games/blox-fruits/values", inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="first-of-darkness")
+async def first_of_darkness(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🌑 First of Darkness Services",
+        description="Premium dungeon services",
+        color=discord.Color.from_rgb(50, 50, 50)
+    )
+    
+    embed.add_field(name="💰 Pricing", value="", inline=False)
+    embed.add_field(name="🐉 Black Beard", value="50M", inline=False)
+    embed.add_field(name="🤖 Cyborg", value="250M", inline=False)
+    embed.add_field(name="⚫ DB V3", value="450M", inline=False)
     
     embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)

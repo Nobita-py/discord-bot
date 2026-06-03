@@ -126,7 +126,6 @@ async def on_guild_channel_create(channel):
         embed.add_field(name="/bosses", value="View Bosses pricing", inline=False)
         embed.add_field(name="/races", value="View Races pricing", inline=False)
         embed.add_field(name="/raging-demon", value="View Raging Demon pricing", inline=False)
-        embed.add_field(name="/first-of-darkness", value="View First of Darkness pricing", inline=False)
         embed.add_field(name="/beli", value="View BELI Grinding pricing", inline=False)
         embed.set_footer(text="Choose a command above to see pricing details!")
         try:

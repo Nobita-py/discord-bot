@@ -120,7 +120,6 @@ async def on_guild_channel_create(channel):
         embed.add_field(name="/raids", value="View Raids pricing", inline=False)
         embed.add_field(name="/advance-raid", value="View Advanced Raid pricing", inline=False)
         embed.add_field(name="/trials", value="View Trial Packages pricing", inline=False)
-        embed.add_field(name="/v4-trials", value="View V4 Trials pricing", inline=False)
         embed.add_field(name="/sea-events", value="View Sea Events pricing", inline=False)
         embed.add_field(name="/weapon-acquiring", value="View Weapon Acquiring pricing", inline=False)
         embed.add_field(name="/fighting-styles", value="View Fighting Styles pricing", inline=False)

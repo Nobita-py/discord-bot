@@ -9,27 +9,25 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 RAIDS = {
-    "🔥 Normal Raid Pricing": {
-        "1–5 Raids": "Quake (1M) / Love (1.2M)",
-        "6–10 Raids": "Spider (1.5M) / Phoenix (3M)",
-        "11–15 Raids": "Sound (3M) / Buddha (12M) / Portal (12M)",
-        "16–20 Raids": "T-Rex (20M) / Venom (25M)",
-        "21–25 Raids": "Dough (30M)",
-        "26–30 Raids": "Gas (60M) / Rumble (90M)",
-        "30+ Raids": "Yeti (140M) / Kitsune (620M)"
-    },
-    "🔥 Advanced Raid Pricing": {
-        "1 Advanced Raid": "Sound (3M)",
-        "2 Advanced Raids": "Spirit (10M) / Mammoth (9M)",
-        "3 Advanced Raids": "Buddha (12M) / Portal (12M)",
-        "4 Advanced Raids": "T-Rex (20M)",
-        "5 Advanced Raids": "Venom (25M)",
-        "6 Advanced Raids": "Dough (30M)",
-        "7 Advanced Raids": "Gas (60M)",
-        "8 Advanced Raids": "Rumble (90M)",
-        "9 Advanced Raids": "Control (120M)",
-        "10 Advanced Raids": "Yeti (140M) / Kitsune (620M)"
+    "🔱 RAIDS": {
+        "5 Raids": "Buddha",
+        "10 Raids": "Dough",
+        "15 Raids": "Dough + Buddha",
+        "20 Raids": "Gas",
+        "25 Raids": "Gas + T-Rex",
+        "30 Raids": "Gas + 40M",
+        "50 Raids": "Torment or Tiger + Gas",
+        "100 Raids": "Green or Kitsune",
+        "200 Raids": "Divine Portal+ or Dragon East"
     }
+}
+
+ADVANCED_RAIDS = {
+    "1 Raid": "T-Rex",
+    "2 Raids": "Dough",
+    "3 Raids": "Dough + Buddha",
+    "4 Raids": "Gas",
+    "Max": "Tiger"
 }
 
 TRIALS = {
@@ -45,6 +43,61 @@ TRIALS = {
         "Trial 3 (Three Trials)": "Dough (30M)",
         "Full V4 Awakening (All 4 Trials)": "Gas (60M) or Rumble (90M) for race trial"
     }
+}
+
+V4_TRIALS = {
+    "1 Trial": "T-Rex",
+    "2 Trials": "Dough",
+    "3 Trials": "Dough + Buddha",
+    "4 Trials": "Gas",
+    "MAX": "Gas + T-Rex"
+}
+
+SEA_EVENTS_LEVI = {
+    "1 Levi": "Gas + T-Rex",
+    "2 Levi": "Tiger or Yeti",
+    "3 Levi": "Kitsune",
+    "4 Levi": "Divine Portal",
+    "5 Levi": "Dragon East"
+}
+
+FIGHTING_STYLES = {
+    "Sanguine Art": "Kitsune",
+    "God Human": "Control / Tiger + Gas",
+    "Other Styles & V2s": "Custom Price - Contact Staff Team"
+}
+
+BOSSES = {
+    "Dark Beard": "Gas",
+    "Indra": "Gas",
+    "Dough King": "Gas",
+    "Cake Prince": "Dough",
+    "Soul Reaper": "Dough",
+    "Tyrant of the Sky": "Dough"
+}
+
+BELI_WITHOUT_2X = {
+    "5 Million": "Dough + T-Rex",
+    "10 Million": "Gas + Dough",
+    "15 Million": "Lightning + Gas",
+    "20 Million": "Tiger or Yeti",
+    "25 Million": "Kitsune",
+    "50 Million": "Divine Portal",
+    "100 Million": "East Dragon",
+    "500 Million": "Perm Gas or above",
+    "1 Billion": "Perm Dragon"
+}
+
+BELI_WITH_2X = {
+    "5 Million": "T-Rex",
+    "10 Million": "T-Rex + Dough",
+    "15 Million": "Lightning + T-Rex",
+    "20 Million": "Gas + T-Rex",
+    "25 Million": "Tiger + Yeti",
+    "50 Million": "Kitsune + Tiger",
+    "100 Million": "Divine Portal",
+    "500 Million": "East Dragon",
+    "1 Billion": "Perm Gas"
 }
 
 @bot.event
@@ -64,10 +117,18 @@ async def on_guild_channel_create(channel):
             description="Use the commands below to see our services and pricing:",
             color=discord.Color.blue()
         )
-        embed.add_field(name="/raids", value="View Raid Services pricing", inline=False)
+        embed.add_field(name="/raids", value="View Raids pricing", inline=False)
+        embed.add_field(name="/advance-raid", value="View Advanced Raid pricing", inline=False)
         embed.add_field(name="/trials", value="View Trial Packages pricing", inline=False)
+        embed.add_field(name="/v4-trials", value="View V4 Trials pricing", inline=False)
+        embed.add_field(name="/sea-events", value="View Sea Events pricing", inline=False)
+        embed.add_field(name="/weapon-acquiring", value="View Weapon Acquiring pricing", inline=False)
+        embed.add_field(name="/fighting-styles", value="View Fighting Styles pricing", inline=False)
+        embed.add_field(name="/bosses", value="View Bosses pricing", inline=False)
+        embed.add_field(name="/races", value="View Races pricing", inline=False)
         embed.add_field(name="/raging-demon", value="View Raging Demon pricing", inline=False)
         embed.add_field(name="/first-of-darkness", value="View First of Darkness pricing", inline=False)
+        embed.add_field(name="/beli", value="View BELI Grinding pricing", inline=False)
         embed.set_footer(text="Choose a command above to see pricing details!")
         try:
             await channel.send(embed=embed)
@@ -77,7 +138,7 @@ async def on_guild_channel_create(channel):
 @bot.tree.command(name="raids")
 async def raids(interaction: discord.Interaction):
     embed = discord.Embed(
-        title="🔥 Raid Services Available 🔥",
+        title="🔱 RAIDS",
         description="✅ Fast Clears ✅ Fragment Farming ✅ Trusted Service ✅ Host Available if Needed",
         color=discord.Color.red()
     )
@@ -86,6 +147,21 @@ async def raids(interaction: discord.Interaction):
         embed.add_field(name=category, value="", inline=False)
         for raid_tier, reward in pricing.items():
             embed.add_field(name=f"⚔️ {raid_tier}", value=reward, inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="advance-raid")
+async def advance_raid(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="⚔️ ADVANCED RAID SERVICE",
+        description="Premium raid service with guaranteed rewards",
+        color=discord.Color.orange()
+    )
+    
+    embed.add_field(name="Pricing", value="", inline=False)
+    for raid_level, reward in ADVANCED_RAIDS.items():
+        embed.add_field(name=f"🎯 {raid_level}", value=reward, inline=False)
     
     embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)
@@ -102,6 +178,131 @@ async def trials(interaction: discord.Interaction):
         embed.add_field(name=f"📦 {package_name}", value="", inline=False)
         for trial_name, reward in trials_list.items():
             embed.add_field(name=f"  • {trial_name}", value=f"  {reward}", inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="v4-trials")
+async def v4_trials(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🏯 V4 TRIALS",
+        description="Fast and reliable V4 Trial service",
+        color=discord.Color.blue()
+    )
+    
+    embed.add_field(name="Pricing", value="", inline=False)
+    for trial_name, reward in V4_TRIALS.items():
+        embed.add_field(name=f"🔱 {trial_name}", value=reward, inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="sea-events")
+async def sea_events(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🌊 SEA EVENTS",
+        description="Premium sea event services",
+        color=discord.Color.teal()
+    )
+    
+    embed.add_field(name="🐉 LEVI", value="", inline=False)
+    for levi_level, reward in SEA_EVENTS_LEVI.items():
+        embed.add_field(name=f"⚓ {levi_level}", value=reward, inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="weapon-acquiring")
+async def weapon_acquiring(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="⚔️ WEAPON ACQUIRING",
+        description="Get powerful weapons fast!",
+        color=discord.Color.from_rgb(200, 100, 0)
+    )
+    
+    # GUNS Section
+    embed.add_field(name="🔫 GUNS - IF NOT MATERIALS", value="", inline=False)
+    embed.add_field(name="Soul Guitar", value="Gas + Dough", inline=False)
+    embed.add_field(name="Dragon Storm", value="Gas + Dough", inline=False)
+    
+    embed.add_field(name="🔫 GUNS - IF MATERIALS", value="", inline=False)
+    embed.add_field(name="Soul Guitar", value="Dough", inline=False)
+    embed.add_field(name="Dragon Storm", value="Custom depending on belt progress", inline=False)
+    
+    # SWORDS Section
+    embed.add_field(name="⚔️ SWORDS", value="", inline=False)
+    embed.add_field(name="Yama", value="T-Rex", inline=False)
+    embed.add_field(name="Tushita", value="Gas", inline=False)
+    embed.add_field(name="TTK Swords", value="Gas per sword", inline=False)
+    embed.add_field(name="TTK Full (From Start)", value="Tiger / Yeti / Control + T-Rex", inline=False)
+    embed.add_field(name="Shark Anchor", value="Lightning (if no materials)", inline=False)
+    embed.add_field(name="Dragon Heart", value="Dough + T-Rex", inline=False)
+    embed.add_field(name="Fox Lamp", value="Kitsune (10 Kitshrine attempts)", inline=False)
+    embed.add_field(name="CDK", value="Custom according to progress", inline=False)
+    embed.add_field(name="Tushita & Yama", value="Dough per trial", inline=False)
+    embed.add_field(name="Darkblade V3", value="Kitsune", inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="fighting-styles")
+async def fighting_styles(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🌀 FIGHTING STYLES",
+        description="Master powerful combat techniques!",
+        color=discord.Color.from_rgb(255, 100, 200)
+    )
+    
+    embed.add_field(name="Pricing", value="", inline=False)
+    for style_name, reward in FIGHTING_STYLES.items():
+        embed.add_field(name=f"💥 {style_name}", value=reward, inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="bosses")
+async def bosses(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="👹 BOSSES",
+        description="Defeat powerful bosses and earn rewards!",
+        color=discord.Color.dark_red()
+    )
+    
+    embed.add_field(name="Pricing", value="", inline=False)
+    for boss_name, reward in BOSSES.items():
+        embed.add_field(name=f"⚔️ {boss_name}", value=reward, inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="races")
+async def races(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🏃 RACES",
+        description="Awaken your race and become powerful!",
+        color=discord.Color.from_rgb(100, 200, 255)
+    )
+    
+    # V1 Section
+    embed.add_field(name="🔷 V1 AWAKENING", value="", inline=False)
+    embed.add_field(name="Ghoul", value="Lightning", inline=False)
+    embed.add_field(name="Cyborg", value="Lightning", inline=False)
+    embed.add_field(name="Draco", value="Lightning + Dough (from base belts)", inline=False)
+    
+    # V2 Section
+    embed.add_field(name="🔶 V2 AWAKENING", value="", inline=False)
+    embed.add_field(name="Draco", value="Dough", inline=False)
+    embed.add_field(name="All Other Races", value="T-Rex", inline=False)
+    
+    # V3 Section
+    embed.add_field(name="🟡 V3 AWAKENING", value="", inline=False)
+    embed.add_field(name="Draco", value="Dough", inline=False)
+    embed.add_field(name="Ghoul", value="T-Rex", inline=False)
+    embed.add_field(name="All Other Races", value="Buddha", inline=False)
+    
+    # Special
+    embed.add_field(name="⚡ SPECIAL", value="", inline=False)
+    embed.add_field(name="Mirage + Blue Gear", value="Gas", inline=False)
     
     embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)
@@ -133,6 +334,25 @@ async def first_of_darkness(interaction: discord.Interaction):
     embed.add_field(name="🐉 Black Beard", value="50M", inline=False)
     embed.add_field(name="🤖 Cyborg", value="250M", inline=False)
     embed.add_field(name="⚫ DB V3", value="450M", inline=False)
+    
+    embed.set_footer(text="🎟️ Open a ticket to order")
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="beli")
+async def beli(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="💰 BELI - Money Grinding Service",
+        description="Earn big money fast!",
+        color=discord.Color.gold()
+    )
+    
+    embed.add_field(name="WITHOUT 2X 💸 MONEY", value="", inline=False)
+    for amount, reward in BELI_WITHOUT_2X.items():
+        embed.add_field(name=f"💵 {amount}", value=reward, inline=False)
+    
+    embed.add_field(name="WITH 2X 💵 MONEY", value="", inline=False)
+    for amount, reward in BELI_WITH_2X.items():
+        embed.add_field(name=f"💰 {amount}", value=reward, inline=False)
     
     embed.set_footer(text="🎟️ Open a ticket to order")
     await interaction.response.send_message(embed=embed)
